@@ -9,5 +9,5 @@ data_types = df.dtypes
 head = df.head()
 missing_count = df.isna().sum()
 duplicates = df.duplicated().sum()
-print("Shape:", shape)
-print("First rows:\n", head)
+print(f"Shape: {shape}\nDtypes:\n{data_types}\nFirst rows:\n{head}")
+print(f"Missing values:\n{missing_count}\nDuplicates: {duplicates}")
