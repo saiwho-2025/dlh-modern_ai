@@ -6,7 +6,7 @@ import numpy as np
 
 def plot_missingness(df):
     """Visualize missing values in a pandas DataFrame."""
-    missing = df.isna()
+    missing = df.isna().to_numpy()
     row_indices, col_indices = missing.to_numpy().nonzero()
 
     plt.figure()
