@@ -9,11 +9,9 @@ def encode_features(df):
     """Encode categorical features for modeling."""
     encoded_df = df.copy()
 
-    # Churn: No -> 0, Yes -> 1
     churn_encoder = preprocessing.LabelEncoder()
     encoded_df["Churn"] = churn_encoder.fit_transform(encoded_df["Churn"])
 
-    # Binary columns: No -> 0, Yes -> 1
     binary_columns = [
         "Partner",
         "Dependents",
@@ -22,19 +20,19 @@ def encode_features(df):
     ]
 
     binary_encoder = preprocessing.OrdinalEncoder(
-        categories=[["No", "Yes"]] * len(binary_columns)
-    )
-    encoded_df[binary_columns] = binary_encoder.fit_transform(
-        encoded_df[binary_columns]
+        categories=[["No", "Yes"]]
     )
 
-    # TenureGroup: alphabetical order
+    for col in binary_columns:
+        encoded_df[[col]] = binary_encoder.fit_transform(encoded_df[[col]])
+        encoded_df[col] = encoded_df[col].astype(int)
+
     tenure_encoder = preprocessing.OrdinalEncoder()
     encoded_df[["TenureGroup"]] = tenure_encoder.fit_transform(
         encoded_df[["TenureGroup"]]
     )
+    encoded_df["TenureGroup"] = encoded_df["TenureGroup"].astype(int)
 
-    # One-hot encoding, drop first category
     encoded_df = pd.get_dummies(
         encoded_df,
         columns=["Contract", "PaymentMethod"],
@@ -42,4 +40,3 @@ def encode_features(df):
     )
 
     return encoded_df, churn_encoder, binary_encoder, tenure_encoder
- 
