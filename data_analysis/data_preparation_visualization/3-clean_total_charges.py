@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 """a function handles missing values"""
+import pandas as pd
 
+def clean_total_charges(df, method='drop'):
+    df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
 
-def clean_total_charges(df,method='drop'):
     if method == "drop":
         df = df.dropna(subset=["TotalCharges"])
 
     elif method == "median":
-        df["TotalCharges"] = df["TotalCharges"].fillna(df["TotalCharges"].median())
+        df["TotalCharges"] = df["TotalCharges"].fillna(
+            df["TotalCharges"].median()
+        )
 
     elif method == "impute":
         df["TotalCharges"] = df["TotalCharges"].fillna(
@@ -15,6 +19,6 @@ def clean_total_charges(df,method='drop'):
         )
 
     else:
-        raise ValueError("method must be one of: 'drop', 'median', or 'impute'")
+        raise ValueError("method must be 'drop', 'median', or 'impute'")
 
     return df
