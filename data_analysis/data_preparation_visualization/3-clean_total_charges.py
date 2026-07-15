@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """a function handles missing values"""
-import pandas as pd
+
 
 def clean_total_charges(df, method='drop'):
     """the method handles different missing values in PandsDataFrame"""
