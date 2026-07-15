@@ -3,6 +3,7 @@
 import pandas as pd
 
 def clean_total_charges(df, method='drop'):
+    """the method handles different missing values in PandsDataFrame"""
     df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
 
     if method == "drop":
