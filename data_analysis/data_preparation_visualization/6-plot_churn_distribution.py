@@ -4,15 +4,14 @@ import matplotlib.pyplot as plt
 
 
 def plot_churn_distribution(df):
-    """Visualize churn class distribution."""
-    churn_counts = df["Churn"].value_counts()
-    colors = [
-        "skyblue" if value == "No" else "salmon"
-        for value in churn_counts.index
-    ]
+    """Generate a bar plot of Churn value counts."""
+    plt.figure(figsize=(12, 8))
 
-    plt.bar(churn_counts.index, churn_counts.values, color=colors)
-    plt.xlabel("Churn")
+    counts = df["Churn"].value_counts().reindex(["No", "Yes"])
+
+    plt.bar(counts.index, counts.values, color=["skyblue", "salmon"])
     plt.ylabel("Count")
     plt.title("Churn Distribution")
     plt.show()
+
+    return None
