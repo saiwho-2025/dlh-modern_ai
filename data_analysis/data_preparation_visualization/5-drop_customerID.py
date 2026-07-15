@@ -2,8 +2,8 @@
 """the function removes customerID column """
 
 
-def drop_costomerID(df):
-    """the function removes the column and returns updated dp"""
+def drop_customerID(df):
+    """Remove the customerID column."""
     cleaned_df = df.copy()
-    cleaned_df = cleaned_df.drop(columns = ["customerID"])
+    cleaned_df = cleaned_df.drop(columns=["customerID"])
     return cleaned_df
