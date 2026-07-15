@@ -5,5 +5,5 @@
 def drop_costomerID(df):
     """the function removes the column and returns updated dp"""
     cleaned_df = df.copy()
-    cleaned_df = df.drop(columns = ["customerID"])
+    cleaned_df = cleaned_df.drop(columns = ["customerID"])
     return cleaned_df
