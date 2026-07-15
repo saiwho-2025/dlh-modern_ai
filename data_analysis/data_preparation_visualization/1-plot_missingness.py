@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """a function that visualizes missing values in a dataframe"""
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 
