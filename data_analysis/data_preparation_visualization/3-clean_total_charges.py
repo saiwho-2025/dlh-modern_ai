@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""a function handles missing values"""
+"""a function that cleans data of NA, set"""
 
 
 def clean_total_charges(df, method='drop'):
-    """try put drop in the last"""
+    """ normalize and drop"""
     def to_float(value):
+        """value type float"""
         try:
             return float(value)
         except (ValueError, TypeError):
