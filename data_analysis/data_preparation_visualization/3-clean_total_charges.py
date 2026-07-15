@@ -4,7 +4,13 @@ import pandas as pd
 
 def clean_total_charges(df, method='drop'):
     """the method handles different missing values in PandsDataFrame"""
-    df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
+    def to_numeric(value):
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return float("nan")
+
+    df["TotalCharges"] = df["TotalCharges"].apply(to_numeric)
 
     if method == "drop":
         df = df.dropna(subset=["TotalCharges"])
