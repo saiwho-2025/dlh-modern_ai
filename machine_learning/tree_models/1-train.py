@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""this function trains a decision tree classifier using scikit-learn"""
-from sklearn import tree
-
+"""this function trains a decision tree classifier"""
 
 
 def train_tree(clf, X, y) -> None:
