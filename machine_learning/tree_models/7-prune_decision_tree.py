@@ -1,26 +1,63 @@
 #!/usr/bin/env python3
-"""Retrieve the cost-complexity pruning path of a decision tree."""
+"""Train and evaluate decision trees using cost-complexity pruning."""
+
+from sklearn import tree
+
+train_tree = __import__('1-train').train_tree
 
 
-def get_pruning_path(clf, X, y):
+def prune_and_evaluate_trees(
+    X_train,
+    y_train,
+    X_test,
+    y_test,
+    ccp_alphas,
+    random_state,
+    min_samples_leaf,
+    min_samples_split,
+):
     """
-    Retrieve the cost-complexity pruning path for a decision tree.
+    Train and evaluate decision trees for multiple pruning values.
 
     Args:
-        clf: A Scikit-learn DecisionTreeClassifier instance.
-        X: Input features used to calculate the pruning path.
-        y: Target labels corresponding to the input features.
+        X_train: Training input features.
+        y_train: Training target labels.
+        X_test: Testing input features.
+        y_test: Testing target labels.
+        ccp_alphas: Cost-complexity pruning alpha values.
+        random_state: Integer seed used for reproducibility.
+        min_samples_leaf: Minimum samples required at a leaf node.
+        min_samples_split: Minimum samples required to split an internal node.
 
     Returns:
         A tuple containing:
-            ccp_alphas: Effective alpha values used for pruning.
-            impurities: Total leaf impurity for each alpha value.
+            clfs: A list of trained decision tree classifiers.
+            train_scores: A list of training accuracy scores.
+            test_scores: A list of testing accuracy scores.
     """
-    # Calculate the effective alpha values and corresponding impurities.
-    pruning_path = clf.cost_complexity_pruning_path(X, y)
+    clfs = []
 
-    # Extract the pruning values from the returned result.
-    ccp_alphas = pruning_path.ccp_alphas
-    impurities = pruning_path.impurities
+    # Create and train one classifier for each pruning alpha value.
+    for ccp_alpha in ccp_alphas:
+        clf = tree.DecisionTreeClassifier(
+            criterion='gini',
+            max_depth=None,
+            min_samples_leaf=min_samples_leaf,
+            min_samples_split=min_samples_split,
+            random_state=random_state,
+            ccp_alpha=ccp_alpha,
+        )
+        train_tree(clf, X_train, y_train)
+        clfs.append(clf)
 
-    return ccp_alphas, impurities
+    # Calculate training and testing accuracy for every trained classifier.
+    train_scores = [
+        clf.score(X_train, y_train)
+        for clf in clfs
+    ]
+    test_scores = [
+        clf.score(X_test, y_test)
+        for clf in clfs
+    ]
+
+    return clfs, train_scores, test_scores
