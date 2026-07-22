@@ -1,22 +1,37 @@
 #!/usr/bin/env python3
-"""Create a random forest classifier."""
+"""Select the best cost-complexity pruning alpha and classifier."""
 
 
-def random_forest(n_estimators, random_state):
+def get_best_alpha(clfs, train_scores, test_scores, ccp_alphas):
     """
-    Create a Scikit-learn random forest classifier.
+    Select the best pruning alpha and its corresponding classifier.
+
+    Models are ranked by highest test accuracy, smallest difference
+    between training and test accuracy, and largest pruning alpha.
 
     Args:
-        n_estimators: Number of decision trees in the forest.
-        random_state: Seed used for reproducible random number generation.
+        clfs: List of trained DecisionTreeClassifier instances.
+        train_scores: Training accuracy score for each classifier.
+        test_scores: Testing accuracy score for each classifier.
+        ccp_alphas: Pruning alpha value associated with each classifier.
 
     Returns:
-        A configured Scikit-learn RandomForestClassifier instance.
+        A tuple containing:
+            best_alpha: The selected cost-complexity pruning alpha.
+            best_clf: The classifier associated with the selected alpha.
     """
-    # Configure the forest with the requested number of decision trees.
-    model = ensemble.RandomForestClassifier(
-        n_estimators=n_estimators,
-        random_state=random_state,
+    # Rank models by test accuracy, generalization gap, and pruning strength.
+    best_index = max(
+        range(len(clfs)),
+        key=lambda index: (
+            test_scores[index],
+            -abs(train_scores[index] - test_scores[index]),
+            ccp_alphas[index],
+        ),
     )
 
-    return model
+    # Return the pruning alpha and classifier at the best-ranked position.
+    best_alpha = ccp_alphas[best_index]
+    best_clf = clfs[best_index]
+
+    return best_alpha, best_clf
