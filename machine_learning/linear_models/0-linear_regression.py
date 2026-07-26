@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+    """Return an untrained ordinary least squares linear regression model."""
 from sklearn import linear_model
 
 
