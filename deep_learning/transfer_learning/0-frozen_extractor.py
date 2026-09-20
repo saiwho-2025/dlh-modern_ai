@@ -1,33 +1,30 @@
 #!/usr/bin/env python3
 """Build a frozen MobileNetV2 feature extractor."""
 
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.layers import GlobalAveragePooling2D
-from tensorflow.keras.models import Model
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def build_feature_extractor():
-    """Return a frozen MobileNetV2 model for image feature extraction."""
-    # Load MobileNetV2 without its ImageNet classification head.
-    base_model = MobileNetV2(
+    """Return a frozen MobileNetV2 feature extractor."""
+    # Load MobileNetV2 without its classification head.
+    base_model = keras.applications.MobileNetV2(
         weights="imagenet",
         include_top=False,
         input_shape=(224, 224, 3),
     )
 
-    # Freeze all pretrained MobileNetV2 weights.
+    # Freeze the pretrained convolutional base.
     base_model.trainable = False
 
-    # Pass images through the frozen convolutional base.
-    inputs = base_model.input
+    # Define the model input.
+    inputs = keras.Input(shape=(224, 224, 3))
+
+    # Extract convolutional features without updating frozen layers.
     features = base_model(inputs, training=False)
 
-    # Convert feature maps into a single feature vector per image.
-    outputs = GlobalAveragePooling2D()(features)
+    # Convert feature maps into one feature vector per image.
+    outputs = keras.layers.GlobalAveragePooling2D()(features)
 
-    # Return the complete feature extraction model.
-    return Model(
-        inputs=inputs,
-        outputs=outputs,
-        name="feature_extractor",
-    )
+    # Return the feature extraction model.
+    return keras.Model(inputs=inputs, outputs=outputs)
