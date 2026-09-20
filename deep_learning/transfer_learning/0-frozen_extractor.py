@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """Build a frozen MobileNetV2 feature extractor."""
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 
 def build_feature_extractor():
     """Return a frozen MobileNetV2 feature extractor."""
@@ -17,13 +14,9 @@ def build_feature_extractor():
     # Freeze the pretrained convolutional base.
     base_model.trainable = False
 
-    # Define the model input.
+    # Add global average pooling to the frozen base model.
     inputs = keras.Input(shape=(224, 224, 3))
-
-    # Extract features using the frozen base model.
     features = base_model(inputs, training=False)
-
-    # Convert feature maps into a feature vector.
     outputs = keras.layers.GlobalAveragePooling2D()(features)
 
     # Return the feature extraction model.
