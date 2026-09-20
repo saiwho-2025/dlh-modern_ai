@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build a frozen MobileNetV2 feature extractor."""
+from tensorflow import keras as K
 
 
 def build_feature_extractor():
