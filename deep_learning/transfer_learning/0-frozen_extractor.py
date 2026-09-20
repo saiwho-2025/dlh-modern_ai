@@ -20,10 +20,10 @@ def build_feature_extractor():
     # Define the model input.
     inputs = keras.Input(shape=(224, 224, 3))
 
-    # Extract convolutional features without updating frozen layers.
+    # Extract features using the frozen base model.
     features = base_model(inputs, training=False)
 
-    # Convert feature maps into one feature vector per image.
+    # Convert feature maps into a feature vector.
     outputs = keras.layers.GlobalAveragePooling2D()(features)
 
     # Return the feature extraction model.
